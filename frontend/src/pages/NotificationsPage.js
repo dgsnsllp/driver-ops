@@ -15,7 +15,7 @@ function NotificationsPage() {
   const fetchNotifications = async () => {
     try {
       const userId = localStorage.getItem('userId');
-      const response = await axios.get(`http://localhost:5000/api/notifications?ownerId=${userId}`);
+      const response = await axios.get(`https://driver-ops.onrender.com/api/notifications?ownerId=${userId}`);
       setNotifications(response.data);
       setLoading(false);
     } catch (error) {

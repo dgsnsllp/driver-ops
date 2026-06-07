@@ -19,7 +19,7 @@ function DriversPage() {
   const fetchDrivers = async () => {
     try {
       const userId = localStorage.getItem('userId');
-      const response = await axios.get(`http://localhost:5000/api/drivers?ownerId=${userId}`);
+      const response = await axios.get(`https://driver-ops.onrender.com/api/drivers?ownerId=${userId}`);
       setDrivers(response.data);
       setLoading(false);
     } catch (error) {
@@ -32,7 +32,7 @@ function DriversPage() {
     e.preventDefault();
     try {
       const userId = localStorage.getItem('userId');
-      await axios.post('http://localhost:5000/api/drivers', { ...newDriver, ownerId: userId });
+      await axios.post('https://driver-ops.onrender.com/api/drivers', { ...newDriver, ownerId: userId });
       setShowAddModal(false);
       setNewDriver({ name: '', status: 'active' });
       fetchDrivers();
@@ -48,7 +48,7 @@ function DriversPage() {
   const confirmDeleteDriver = async () => {
     if (!driverToDelete) return;
     try {
-      await axios.delete(`http://localhost:5000/api/drivers/${driverToDelete}`);
+      await axios.delete(`https://driver-ops.onrender.com/api/drivers/${driverToDelete}`);
       setDrivers(drivers.filter(d => d._id !== driverToDelete));
       setDriverToDelete(null);
     } catch (error) {

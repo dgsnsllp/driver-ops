@@ -38,7 +38,7 @@ function Onboarding() {
     setLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/onboarding', {
+      const res = await axios.post('https://driver-ops.onrender.com/api/auth/onboarding', {
         userId,
         phone,
         companyName,

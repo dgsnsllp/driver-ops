@@ -122,7 +122,7 @@ function ReportPage() {
     const fullDate = `${dateStr} ${timeStr}`;
 
     try {
-      await axios.post('http://localhost:5000/api/vehicles/message', {
+      await axios.post('https://driver-ops.onrender.com/api/vehicles/message', {
         driverId: driverId,
         text: customMessage,
         date: fullDate

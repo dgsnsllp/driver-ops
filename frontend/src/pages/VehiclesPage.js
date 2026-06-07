@@ -35,8 +35,8 @@ function VehiclesPage() {
     try {
       const userId = localStorage.getItem('userId');
       const [vehiclesRes, driversRes] = await Promise.all([
-        axios.get(`http://localhost:5000/api/vehicles?ownerId=${userId}`),
-        axios.get(`http://localhost:5000/api/drivers?ownerId=${userId}`)
+        axios.get(`https://driver-ops.onrender.com/api/vehicles?ownerId=${userId}`),
+        axios.get(`https://driver-ops.onrender.com/api/drivers?ownerId=${userId}`)
       ]);
       setVehicles(vehiclesRes.data);
       setDrivers(driversRes.data);
@@ -57,10 +57,10 @@ function VehiclesPage() {
         ownerId: userId
       };
 
-      await axios.post('http://localhost:5000/api/vehicles', payload);
-      const vehiclesRes = await axios.get(`http://localhost:5000/api/vehicles?ownerId=${userId}`);
+      await axios.post('https://driver-ops.onrender.com/api/vehicles', payload);
+      const vehiclesRes = await axios.get(`https://driver-ops.onrender.com/api/vehicles?ownerId=${userId}`);
       setVehicles(vehiclesRes.data);
-      const driversRes = await axios.get(`http://localhost:5000/api/drivers?ownerId=${userId}`);
+      const driversRes = await axios.get(`https://driver-ops.onrender.com/api/drivers?ownerId=${userId}`);
       setDrivers(driversRes.data);
       setShowAddModal(false);
       setNewVehicle({ plate: '', model: '', year: '', status: 'Aktif', driverId: '', maintenanceDate: '' });
@@ -77,11 +77,11 @@ function VehiclesPage() {
     if (!vehicleToDelete) return;
     try {
       const userId = localStorage.getItem('userId');
-      await axios.delete(`http://localhost:5000/api/vehicles/${vehicleToDelete}`);
+      await axios.delete(`https://driver-ops.onrender.com/api/vehicles/${vehicleToDelete}`);
       
-      const vehiclesRes = await axios.get(`http://localhost:5000/api/vehicles?ownerId=${userId}`);
+      const vehiclesRes = await axios.get(`https://driver-ops.onrender.com/api/vehicles?ownerId=${userId}`);
       setVehicles(vehiclesRes.data);
-      const driversRes = await axios.get(`http://localhost:5000/api/drivers?ownerId=${userId}`);
+      const driversRes = await axios.get(`https://driver-ops.onrender.com/api/drivers?ownerId=${userId}`);
       setDrivers(driversRes.data);
       setVehicleToDelete(null);
     } catch (error) {

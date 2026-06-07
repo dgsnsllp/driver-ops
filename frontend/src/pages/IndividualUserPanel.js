@@ -57,7 +57,7 @@ function IndividualUserPanel() {
       const userId = localStorage.getItem('userId');
       if (!userId) return;
 
-      const res = await axios.get(`http://localhost:5000/api/users/me/${userId}`);
+      const res = await axios.get(`https://driver-ops.onrender.com/api/users/me/${userId}`);
       const { user, vehicle } = res.data;
 
       if (user) {

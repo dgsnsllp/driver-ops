@@ -22,9 +22,9 @@ function Dashboard() {
     try {
       const userId = localStorage.getItem('userId');
       const [dashRes, rankRes, notifRes] = await Promise.all([
-        axios.get(`http://localhost:5000/api/dashboard?ownerId=${userId}`),
-        axios.get(`http://localhost:5000/api/drivers/ranking?ownerId=${userId}`),
-        axios.get(`http://localhost:5000/api/notifications?ownerId=${userId}`)
+        axios.get(`https://driver-ops.onrender.com/api/dashboard?ownerId=${userId}`),
+        axios.get(`https://driver-ops.onrender.com/api/drivers/ranking?ownerId=${userId}`),
+        axios.get(`https://driver-ops.onrender.com/api/notifications?ownerId=${userId}`)
       ]);
       
       setDashboardData(dashRes.data);
@@ -39,7 +39,7 @@ function Dashboard() {
 
   const handleMarkRead = async (notifId) => {
     try {
-      await axios.put(`http://localhost:5000/api/notifications/${notifId}/read`);
+      await axios.put(`https://driver-ops.onrender.com/api/notifications/${notifId}/read`);
       // Update local state to immediately show it as read
       setIncomingNotifications(prev => prev.map(n => n._id === notifId ? { ...n, isRead: true } : n));
       // Refresh dashboard stats to update unread count

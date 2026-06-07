@@ -23,7 +23,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.get(`http://localhost:5000/api/vehicles/search?plate=${encodeURIComponent(searchPlate)}`);
+      const res = await axios.get(`https://driver-ops.onrender.com/api/vehicles/search?plate=${encodeURIComponent(searchPlate)}`);
       navigate(`/report/${res.data.driverId}`);
     } catch (err) {
       if (err.response?.status === 404) {
@@ -52,7 +52,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const res = await axios.post('https://driver-ops.onrender.com/api/auth/login', { email, password });
       const { token, user } = res.data;
 
       localStorage.setItem('token', token);
@@ -93,7 +93,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', {
+      const res = await axios.post('https://driver-ops.onrender.com/api/auth/register', {
         name,
         email,
         password,
@@ -140,7 +140,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/forgot-password', {
+      const res = await axios.post('https://driver-ops.onrender.com/api/auth/forgot-password', {
         email,
         newPassword: password
       });
