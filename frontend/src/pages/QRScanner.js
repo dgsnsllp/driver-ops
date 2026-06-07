@@ -102,28 +102,6 @@ function QRScanner() {
             </div>
           </div>
 
-          {/* İstatistikler */}
-          <div className="stats-section">
-            <h2>QR TARAMA İSTATİSTİKLERİ</h2>
-            <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-number">47</div>
-                <div className="stat-label">Toplam Tarama</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-number">12</div>
-                <div className="stat-label">Bu Ay</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-number">3</div>
-                <div className="stat-label">Bugün</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-number">+15%</div>
-                <div className="stat-label">Artış</div>
-              </div>
-            </div>
-          </div>
 
           {/* Bildirim Yazısı */}
           <div className="instructions-section">
