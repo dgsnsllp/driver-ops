@@ -2,10 +2,9 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 
 // Platform'a göre doğru API adresi seçilir
-// Telefonunuzda test edebilmeniz için bilgisayarınızın yerel IP adresi (192.168.1.157) ayarlandı.
+// Canlı sunucu (Render.com) kullanılıyor
 const getApiUrl = () => {
-  if (Platform.OS === 'web') return 'http://localhost:5000/api';
-  return 'http://192.168.1.157:5000/api'; // Mobil cihazlar (iOS ve Android) için
+  return 'https://driver-ops.onrender.com/api'; // Tüm platformlar için canlı API
 };
 
 const API_URL = getApiUrl();
