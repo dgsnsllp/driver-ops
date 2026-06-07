@@ -1,0 +1,41 @@
+.notifications-main {
+}
+
+.notifications-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.notification-item {
+  background: linear-gradient(135deg, rgba(15, 52, 96, 0.8) 0%, rgba(9, 33, 58, 0.8) 100%);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.notification-item:hover {
+  border-color: rgba(0, 212, 255, 0.6);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+  transform: translateY(-5px);
+}
+
+.notification-item h3 {
+  color: #00d4ff;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.notification-item p {
+  color: #b0b0c0;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.notification-item .date {
+  color: #8b8b9a;
+  font-size: 12px;
+}

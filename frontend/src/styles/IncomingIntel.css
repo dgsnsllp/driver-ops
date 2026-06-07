@@ -1,0 +1,111 @@
+.incoming-intel {
+  background: linear-gradient(135deg, rgba(15, 52, 96, 0.6) 0%, rgba(9, 33, 58, 0.6) 100%);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.incoming-intel h2 {
+  color: #a0a0b0;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.incoming-intel h2 svg {
+  color: #fda029;
+}
+
+.intel-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.intel-item {
+  padding: 16px;
+  background: rgba(0, 212, 255, 0.05);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.intel-item.unread {
+  border-left: 3px solid #00d4ff;
+  cursor: pointer;
+  background: rgba(0, 212, 255, 0.1);
+}
+
+.intel-item.unread:hover {
+  background: rgba(0, 212, 255, 0.15);
+  transform: translateX(4px);
+}
+
+.intel-item.read {
+  border-left: 3px solid #3f4455;
+  opacity: 0.6;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.intel-item.read:hover {
+  opacity: 0.8;
+}
+
+.intel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.intel-header h4 {
+  color: #00d4ff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.date {
+  color: #8b8b9a;
+  font-size: 12px;
+}
+
+.intel-message {
+  color: #c0c0d0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.intel-item.unread .intel-header h4 {
+  font-weight: 800;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+}
+
+.intel-item.unread .intel-message {
+  color: #e0e0f0;
+}
+
+.incoming-intel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.incoming-intel::-webkit-scrollbar-track {
+  background: rgba(0, 212, 255, 0.05);
+  border-radius: 3px;
+}
+
+.incoming-intel::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 255, 0.3);
+  border-radius: 3px;
+}
+
+.incoming-intel::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 212, 255, 0.5);
+}
