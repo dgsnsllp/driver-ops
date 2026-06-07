@@ -9,7 +9,7 @@ function QRScanner() {
   const [copied, setCopied] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  const qrValue = `http://localhost:3000/report/${driverId}`;
+  const qrValue = `https://driver-ops-peach.vercel.app/report/${driverId}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(qrValue);
@@ -72,33 +72,6 @@ function QRScanner() {
 
             <div className="qr-info">
               <p><strong>URL:</strong> {qrValue}</p>
-            </div>
-          </div>
-
-          {/* Sürücü Bilgileri */}
-          <div className="driver-info-section">
-            <h2>SÜRÜCÜ BİLGİLERİ</h2>
-            <div className="driver-info-card">
-              <div className="info-item">
-                <span className="label">Sürücü ID</span>
-                <span className="value">{driverId}</span>
-              </div>
-              <div className="info-item">
-                <span className="label">Ad Soyad</span>
-                <span className="value">Ahmet Yılmaz</span>
-              </div>
-              <div className="info-item">
-                <span className="label">Telefon</span>
-                <span className="value">+90 532 XXX XXXX</span>
-              </div>
-              <div className="info-item">
-                <span className="label">Durum</span>
-                <span className="value status-active">Aktif</span>
-              </div>
-              <div className="info-item">
-                <span className="label">QR Oluşturum</span>
-                <span className="value">03.06.2026 14:23</span>
-              </div>
             </div>
           </div>
 
