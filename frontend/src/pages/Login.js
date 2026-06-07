@@ -52,7 +52,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post('https://driver-ops.onrender.com/api/auth/login', { email, password });
+      const res = await axios.post('https://driver-ops.onrender.com/api/auth/login', { email, password, userType });
       const { token, user } = res.data;
 
       localStorage.setItem('token', token);
