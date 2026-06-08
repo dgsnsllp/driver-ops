@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { LogIn, Mail, Lock, AlertCircle, UserPlus, User, ArrowLeft, ArrowRight, KeyRound, Search, MessageSquare } from 'lucide-react';
+import { LogIn, Mail, Lock, AlertCircle, UserPlus, User, ArrowLeft, ArrowRight, KeyRound, Search, MessageSquare, ShieldCheck, Zap } from 'lucide-react';
 import '../styles/Login.css';
 
 function Login() {
@@ -359,16 +359,29 @@ function Login() {
           </a>
 
           <div className="info-card">
-            <h3>👤 Bireysel Panel</h3>
-            <p>Araç bilgilerini görüntüleyin, QR kod oluşturun, bildirimleri takip edin</p>
+            <h3><Zap size={20} color="#00d4ff"/> Sistem Nedir ve Ne İşe Yarar?</h3>
+            <p>Acil durumlarda ya da park hatası gibi durumlarda, aracınızın camındaki QR kodu okutan kişilerin sizinle anında iletişime geçmesini sağlayan dijital bir numaralıktır.</p>
           </div>
           <div className="info-card">
-            <h3>🏢 Şirket Paneli</h3>
-            <p>Tüm araçlarını ve sürücülerini yönetin, analitiğe erişin</p>
+            <h3><ShieldCheck size={20} color="#4ade80"/> Yüksek Gizlilik ve Güvenlik</h3>
+            <p>Telefon numaranız <strong>kesinlikle</strong> 3. şahıslara gösterilmez. Numaralarınız paylaşılmadan, tamamen anonim ve güvenli bir altyapı üzerinden bildirim alırsınız.</p>
           </div>
           <div className="info-card">
-            <h3>📡 Anonim Bildiriler</h3>
-            <p>QR kod tarayarak diğer sürücüler hakkında güvenli feedback verin</p>
+            <h3>📱 Nasıl Çalışır?</h3>
+            <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                <strong style={{ color: '#00d4ff', minWidth: '20px' }}>1.</strong>
+                <span style={{ color: '#b0b0c0', fontSize: '0.9rem' }}>QR Kodu aracınızın camına yapıştırın.</span>
+              </div>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                <strong style={{ color: '#00d4ff', minWidth: '20px' }}>2.</strong>
+                <span style={{ color: '#b0b0c0', fontSize: '0.9rem' }}>İletişim kurmak isteyen kişi QR'ı okutup mesajını yazsın. Uygulama indirmesine gerek yoktur!</span>
+              </div>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                <strong style={{ color: '#00d4ff', minWidth: '20px' }}>3.</strong>
+                <span style={{ color: '#b0b0c0', fontSize: '0.9rem' }}>Telefonunuza anında güvenli bildirim gelsin.</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
