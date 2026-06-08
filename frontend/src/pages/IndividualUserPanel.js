@@ -43,15 +43,41 @@ function IndividualUserPanel() {
   const [readMessages, setReadMessages] = useState(JSON.parse(localStorage.getItem('readQRMessages') || '[]'));
 
   // Bildirimler
-  const [userNotifications, setUserNotifications] = useState([
-    {
-      id: 1,
-      type: 'Sistem',
-      message: 'Driver Ops paneline hoş geldiniz.',
-      date: new Date().toLocaleDateString('tr-TR'),
-      read: false
+  const [userNotifications, setUserNotifications] = useState([]);
+
+  // Muayene bildirimini hesapla
+  useEffect(() => {
+    const notifications = [];
+    
+    if (vehicleInfo.nextService && vehicleInfo.nextService !== 'Belirtilmedi') {
+      const nextServiceDate = new Date(vehicleInfo.nextService);
+      const today = new Date();
+      nextServiceDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+      
+      const diffTime = nextServiceDate - today;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      if (diffDays >= 0 && diffDays <= 2) {
+        notifications.push({
+          id: 'service-notif',
+          type: 'Bakım',
+          message: `Araç servis/muayenesi için ${diffDays === 0 ? 'bugün' : `${diffDays} gün sonra`} muayene zamanı!`,
+          date: new Date().toLocaleDateString('tr-TR'),
+          read: false
+        });
+      }
     }
-  ]);
+    
+    // Okunmuş bildirimleri localStorage'dan al
+    const readList = JSON.parse(localStorage.getItem('readSysNotifications') || '[]');
+    const finalNotifs = notifications.map(n => ({
+      ...n,
+      read: readList.includes(n.id)
+    }));
+
+    setUserNotifications(finalNotifs);
+  }, [vehicleInfo.nextService]);
 
   const loadUserData = async () => {
     try {
@@ -140,6 +166,11 @@ function IndividualUserPanel() {
     setUserNotifications(userNotifications.map(notif =>
       notif.id === id ? { ...notif, read: true } : notif
     ));
+    const readList = JSON.parse(localStorage.getItem('readSysNotifications') || '[]');
+    if (!readList.includes(id)) {
+      readList.push(id);
+      localStorage.setItem('readSysNotifications', JSON.stringify(readList));
+    }
   };
 
   // İletişim kaydetme
@@ -440,27 +471,33 @@ function IndividualUserPanel() {
             </div>
 
             <div className="notifications-list">
-              {userNotifications.map(notif => (
-                <div
-                  key={notif.id}
-                  className={`notification-item ${notif.read ? 'read' : 'unread'}`}
-                  onClick={() => markAsRead(notif.id)}
-                >
-                  <div className="notif-left">
-                    <div className={`notif-badge ${notif.type.toLowerCase().replace(/\s/g, '-')}`}>
-                      {notif.type.charAt(0)}
-                    </div>
-                    <div className="notif-content">
-                      <h4>{notif.type}</h4>
-                      <p>{notif.message}</p>
-                      <small>{notif.date}</small>
-                    </div>
-                  </div>
-                  <div className={`notif-status ${notif.read ? 'read-icon' : 'unread-icon'}`}>
-                    {notif.read ? '✓' : '●'}
-                  </div>
+              {userNotifications.length === 0 ? (
+                <div style={{ padding: '20px', textAlign: 'center', color: '#606a80' }}>
+                  Yaklaşan muayene veya yeni bildirim bulunmuyor.
                 </div>
-              ))}
+              ) : (
+                userNotifications.map(notif => (
+                  <div
+                    key={notif.id}
+                    className={`notification-item ${notif.read ? 'read' : 'unread'}`}
+                    onClick={() => markAsRead(notif.id)}
+                  >
+                    <div className="notif-left">
+                      <div className={`notif-badge ${notif.type.toLowerCase().replace(/\s/g, '-')}`}>
+                        {notif.type.charAt(0)}
+                      </div>
+                      <div className="notif-content">
+                        <h4>{notif.type}</h4>
+                        <p>{notif.message}</p>
+                        <small>{notif.date}</small>
+                      </div>
+                    </div>
+                    <div className={`notif-status ${notif.read ? 'read-icon' : 'unread-icon'}`}>
+                      {notif.read ? '✓' : '●'}
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
