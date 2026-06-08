@@ -325,3 +325,37 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 768px) {
+  .qr-main {
+    padding: 15px 10px;
+  }
+  
+  .qr-header h1 {
+    font-size: 24px;
+  }
+  
+  .qr-display-section, .driver-info-section, .instructions-section {
+    padding: 20px 15px;
+  }
+  
+  .qr-box {
+    padding: 15px;
+    min-height: auto;
+  }
+  
+  .qr-placeholder {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    aspect-ratio: 1;
+  }
+  
+  .qr-actions {
+    flex-direction: column;
+  }
+  
+  .action-btn {
+    width: 100%;
+  }
+}

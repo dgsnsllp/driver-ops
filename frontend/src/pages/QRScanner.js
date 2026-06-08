@@ -8,6 +8,13 @@ function QRScanner() {
   const [qrGenerated, setQrGenerated] = useState(true);
   const [copied, setCopied] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  React.useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const qrValue = `https://driver-ops-peach.vercel.app/report/${driverId}`;
 
@@ -26,7 +33,7 @@ function QRScanner() {
   };
 
   return (
-    <div className="qr-scanner-page" style={{ marginLeft: sidebarCollapsed ? '72px' : '240px', transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+    <div className="qr-scanner-page" style={{ marginLeft: isMobile ? '60px' : (sidebarCollapsed ? '72px' : '240px'), transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
       <Sidebar onToggle={(collapsed) => setSidebarCollapsed(collapsed)} />
       <main className="qr-main">
         <div className="qr-header">
