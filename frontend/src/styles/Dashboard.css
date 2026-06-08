@@ -38,3 +38,17 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 768px) {
+  .dashboard-main {
+    padding: 20px 15px;
+  }
+  .dashboard-main h1 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}

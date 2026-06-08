@@ -810,7 +810,19 @@
 
 @media (max-width: 768px) {
   .user-panel-main {
-    padding: 20px;
+    padding: 15px 10px;
+  }
+
+  .vehicle-info-section, .contact-section, .messages-section {
+    padding: 15px;
+  }
+
+  .vehicle-card, .contact-card {
+    padding: 15px;
+  }
+
+  .vehicle-details {
+    grid-template-columns: 1fr;
   }
 
   .vehicle-header {
