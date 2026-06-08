@@ -26,6 +26,14 @@
       "eas": {
         "projectId": "bf85baf2-4283-4959-9727-e476972be7c9"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Araç QR kodunu taramak için kamera izni gerekiyor."
+        }
+      ]
+    ]
   }
 }
