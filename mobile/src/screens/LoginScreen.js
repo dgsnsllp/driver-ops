@@ -18,7 +18,8 @@ const LoginScreen = () => {
       return;
     }
     setLoading(true);
-    const result = await login(email, password, userType);
+    const formattedEmail = email.trim().toLowerCase();
+    const result = await login(formattedEmail, password, userType);
     setLoading(false);
     if (!result.success) {
       Alert.alert('Giriş Başarısız', result.error);

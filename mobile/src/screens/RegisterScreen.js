@@ -22,7 +22,8 @@ const RegisterScreen = () => {
     setLoading(true);
     try {
       console.log('Sending API request...');
-      const response = await api.post('/auth/register', { name, email, password, userType });
+      const formattedEmail = email.trim().toLowerCase();
+      const response = await api.post('/auth/register', { name, email: formattedEmail, password, userType });
       console.log('API response:', response.data);
       if (response.data.token) {
         if (Platform.OS === 'web') {
