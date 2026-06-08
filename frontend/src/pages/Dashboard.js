@@ -21,15 +21,48 @@ function Dashboard() {
   const fetchDashboardData = async () => {
     try {
       const userId = localStorage.getItem('userId');
-      const [dashRes, rankRes, notifRes] = await Promise.all([
+      const [dashRes, rankRes, notifRes, vehiclesRes] = await Promise.all([
         axios.get(`https://driver-ops.onrender.com/api/dashboard?ownerId=${userId}`),
         axios.get(`https://driver-ops.onrender.com/api/drivers/ranking?ownerId=${userId}`),
-        axios.get(`https://driver-ops.onrender.com/api/notifications?ownerId=${userId}`)
+        axios.get(`https://driver-ops.onrender.com/api/notifications?ownerId=${userId}`),
+        axios.get(`https://driver-ops.onrender.com/api/vehicles?ownerId=${userId}`)
       ]);
+      
+      const maintenanceNotifs = [];
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      vehiclesRes.data.forEach(vehicle => {
+        // vehicle.maintenanceDate veya sistemde kayıtlı neyse onu kullan
+        if (vehicle.maintenanceDate && vehicle.maintenanceDate !== '') {
+          const maintDate = new Date(vehicle.maintenanceDate);
+          maintDate.setHours(0, 0, 0, 0);
+          
+          const diffTime = maintDate - today;
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          
+          if (diffDays >= 0 && diffDays <= 2) {
+            maintenanceNotifs.push({
+              _id: `maint-${vehicle._id}`,
+              driver: 'Sistem - Bakım Uyarısı',
+              message: `${vehicle.plate} plakalı ${vehicle.model} aracının servis/muayene süresine ${diffDays === 0 ? 'bugün' : `${diffDays} gün`} kaldı!`,
+              date: new Date().toLocaleDateString('tr-TR'),
+              isRead: false,
+              isSystemMaint: true
+            });
+          }
+        }
+      });
+      
+      const readMaintNotifs = JSON.parse(localStorage.getItem('readMaintNotifs') || '[]');
+      const processedMaintNotifs = maintenanceNotifs.map(n => ({
+         ...n,
+         isRead: readMaintNotifs.includes(n._id)
+      }));
       
       setDashboardData(dashRes.data);
       setDriverRanking(rankRes.data);
-      setIncomingNotifications(notifRes.data);
+      setIncomingNotifications([...processedMaintNotifs, ...notifRes.data]);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -39,6 +72,16 @@ function Dashboard() {
 
   const handleMarkRead = async (notifId) => {
     try {
+      if (notifId.toString().startsWith('maint-')) {
+         const readMaintNotifs = JSON.parse(localStorage.getItem('readMaintNotifs') || '[]');
+         if (!readMaintNotifs.includes(notifId)) {
+            readMaintNotifs.push(notifId);
+            localStorage.setItem('readMaintNotifs', JSON.stringify(readMaintNotifs));
+         }
+         setIncomingNotifications(prev => prev.map(n => n._id === notifId ? { ...n, isRead: true } : n));
+         return;
+      }
+
       await axios.put(`https://driver-ops.onrender.com/api/notifications/${notifId}/read`);
       // Update local state to immediately show it as read
       setIncomingNotifications(prev => prev.map(n => n._id === notifId ? { ...n, isRead: true } : n));
