@@ -105,7 +105,7 @@ function IndividualUserPanel() {
           year: vehicle.year || 'Belirtilmedi',
           vin: vehicle._id || 'Belirtilmedi',
           lastService: vehicle.maintenanceDate || 'Belirtilmedi',
-          nextService: 'Belirtilmedi',
+          nextService: vehicle.nextService || 'Belirtilmedi',
           km: 'Belirtilmedi',
           oilChange: 'Belirtilmedi',
           tireCheck: 'Belirtilmedi',
@@ -185,9 +185,22 @@ function IndividualUserPanel() {
   };
 
   // Bakım kaydetme
-  const saveMaintenance = () => {
-    setVehicleInfo({ ...vehicleDraft });
-    setMaintenanceEditing(false);
+  const saveMaintenance = async () => {
+    try {
+      if (vehicleInfo.vin && vehicleInfo.vin !== 'Belirtilmedi') {
+        await axios.put(`https://driver-ops.onrender.com/api/vehicles/${vehicleInfo.vin}`, {
+          maintenanceDate: vehicleDraft.lastService,
+          nextService: vehicleDraft.nextService
+        });
+      }
+      setVehicleInfo({ ...vehicleDraft });
+      setMaintenanceEditing(false);
+    } catch (err) {
+      console.error('Bakım kaydedilemedi:', err);
+      // Fallback
+      setVehicleInfo({ ...vehicleDraft });
+      setMaintenanceEditing(false);
+    }
   };
 
   const cancelMaintenanceEdit = () => {

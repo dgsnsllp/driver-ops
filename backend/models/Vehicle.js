@@ -8,6 +8,7 @@ const vehicleSchema = new mongoose.Schema({
   driverId: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver', default: null },
   driverName: { type: String, default: 'Atanmadı' },
   maintenanceDate: { type: String, default: '' },
+  nextService: { type: String, default: '' },
   ownerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   messages: [{
     text: { type: String },

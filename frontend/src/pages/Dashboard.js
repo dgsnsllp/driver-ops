@@ -33,9 +33,9 @@ function Dashboard() {
       today.setHours(0, 0, 0, 0);
 
       vehiclesRes.data.forEach(vehicle => {
-        // vehicle.maintenanceDate veya sistemde kayıtlı neyse onu kullan
-        if (vehicle.maintenanceDate && vehicle.maintenanceDate !== '') {
-          const maintDate = new Date(vehicle.maintenanceDate);
+        // vehicle.nextService kontrol ediliyor (Eğer bireysel panelde ayarlanmışsa)
+        if (vehicle.nextService && vehicle.nextService !== '') {
+          const maintDate = new Date(vehicle.nextService);
           maintDate.setHours(0, 0, 0, 0);
           
           const diffTime = maintDate - today;
