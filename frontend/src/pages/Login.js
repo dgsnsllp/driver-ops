@@ -52,7 +52,8 @@ function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post('https://driver-ops.onrender.com/api/auth/login', { email, password, userType });
+      const formattedEmail = email.trim().toLowerCase();
+      const res = await axios.post('https://driver-ops.onrender.com/api/auth/login', { email: formattedEmail, password, userType });
       const { token, user } = res.data;
 
       localStorage.setItem('token', token);
@@ -93,9 +94,10 @@ function Login() {
     setLoading(true);
 
     try {
+      const formattedEmail = email.trim().toLowerCase();
       const res = await axios.post('https://driver-ops.onrender.com/api/auth/register', {
         name,
-        email,
+        email: formattedEmail,
         password,
         userType
       });

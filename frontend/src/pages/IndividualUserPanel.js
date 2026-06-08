@@ -8,6 +8,7 @@ import '../styles/IndividualUserPanel.css';
 function IndividualUserPanel() {
   const navigate = useNavigate();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const messagesEndRef = useRef(null);
 
   // İletişim bilgileri state
@@ -146,7 +147,14 @@ function IndividualUserPanel() {
   useEffect(() => {
     loadUserData();
     const interval = setInterval(loadUserData, 5000);
-    return () => clearInterval(interval);
+    
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   // Mesajlar değiştiğinde en alta scroll
@@ -269,7 +277,7 @@ function IndividualUserPanel() {
   };
 
   return (
-    <div className="individual-user-panel" style={{ marginLeft: sidebarCollapsed ? '72px' : '240px', transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+    <div className="individual-user-panel" style={{ marginLeft: isMobile ? '60px' : (sidebarCollapsed ? '72px' : '240px'), transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
       <Sidebar onToggle={(collapsed) => setSidebarCollapsed(collapsed)} />
       <main className="user-panel-main">
         <div className="user-panel-header">

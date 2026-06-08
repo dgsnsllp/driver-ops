@@ -13,9 +13,13 @@ function Dashboard() {
   const [incomingNotifications, setIncomingNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
     fetchDashboardData();
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const fetchDashboardData = async () => {
@@ -97,7 +101,7 @@ function Dashboard() {
   }
 
   return (
-    <div className="dashboard" style={{ marginLeft: sidebarCollapsed ? '72px' : '240px', transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+    <div className="dashboard" style={{ marginLeft: isMobile ? '60px' : (sidebarCollapsed ? '72px' : '240px'), transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
       <Sidebar onToggle={(collapsed) => setSidebarCollapsed(collapsed)} />
       <main className="dashboard-main">
         <h1>KONTROL PANELİ</h1>
