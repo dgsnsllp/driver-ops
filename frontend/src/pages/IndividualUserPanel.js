@@ -266,8 +266,6 @@ function IndividualUserPanel() {
 
         <div className="user-panel-content">
 
-        <div className="user-panel-content">
-
           {/* ═══════ MESAJ KUTUSU (QR Bildirimleri + Cevaplar) ═══════ */}
           <div className="messages-section" onClick={handleMarkMessagesRead}>
             <div className="section-header">
