@@ -40,6 +40,7 @@ function IndividualUserPanel() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [replyingTo, setReplyingTo] = useState(null);
+  const [readMessages, setReadMessages] = useState(JSON.parse(localStorage.getItem('readQRMessages') || '[]'));
 
   // Bildirimler
   const [userNotifications, setUserNotifications] = useState([
@@ -212,7 +213,16 @@ function IndividualUserPanel() {
   };
 
   // QR'dan gelen yeni mesaj sayısı
-  const unreadQRMessages = messages.filter(m => !m.fromMe && !m.replied).length;
+  const unreadQRMessages = messages.filter(m => !m.fromMe && !readMessages.includes(m.id)).length;
+
+  const handleMarkMessagesRead = () => {
+    if (unreadQRMessages > 0) {
+      const allMessageIds = messages.filter(m => !m.fromMe).map(m => m.id);
+      const newReadIds = [...new Set([...readMessages, ...allMessageIds])];
+      setReadMessages(newReadIds);
+      localStorage.setItem('readQRMessages', JSON.stringify(newReadIds));
+    }
+  };
 
   return (
     <div className="individual-user-panel" style={{ marginLeft: sidebarCollapsed ? '72px' : '240px', transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
@@ -224,6 +234,87 @@ function IndividualUserPanel() {
         </div>
 
         <div className="user-panel-content">
+
+        <div className="user-panel-content">
+
+          {/* ═══════ MESAJ KUTUSU (QR Bildirimleri + Cevaplar) ═══════ */}
+          <div className="messages-section" onClick={handleMarkMessagesRead}>
+            <div className="section-header">
+              <MessageSquare size={24} />
+              <h2>MESAJ KUTUSU {unreadQRMessages > 0 && <span className="msg-badge">{unreadQRMessages} yeni</span>}</h2>
+              <button className="edit-section-btn" onClick={loadUserData}>
+                <RefreshCw size={16} />
+                Yenile
+              </button>
+            </div>
+
+            <div className="messages-card">
+              {messages.length === 0 ? (
+                <div className="no-messages">
+                  <MessageSquare size={48} />
+                  <p>Henüz mesaj yok</p>
+                  <small>QR kodunuz tarandığında gelen bildirimler burada görünecek</small>
+                </div>
+              ) : (
+                <div className="messages-list" id="messages-list">
+                  {messages.map(msg => (
+                    <div key={msg.id} className={`message-bubble ${msg.fromMe ? 'sent' : 'received'}`}>
+                      {!msg.fromMe && (
+                        <div className="msg-header-row">
+                          {msg.templateEmoji && <span className="msg-template-emoji">{msg.templateEmoji}</span>}
+                          <span className="msg-sender">{msg.sender}</span>
+                          {msg.templateTitle && <span className="msg-template-tag">{msg.templateTitle}</span>}
+                        </div>
+                      )}
+                      {msg.replyToText && (
+                        <div className="reply-quote">
+                          <span className="reply-sender">↩ {msg.replyToSender}</span>
+                          <p>{msg.replyToText.length > 60 ? msg.replyToText.substring(0, 60) + '...' : msg.replyToText}</p>
+                        </div>
+                      )}
+                      <p className="msg-text">{msg.text}</p>
+                      <div className="msg-footer">
+                        <span className="msg-time">{msg.time} • {msg.date}</span>
+                        {!msg.fromMe && (
+                          <button className="reply-btn" onClick={(e) => { e.stopPropagation(); handleReply(msg); }}>
+                            ↩ Cevapla
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  <div ref={messagesEndRef} />
+                </div>
+              )}
+
+              {/* Cevaplama Alanı */}
+              <div className="message-input-area" onClick={(e) => e.stopPropagation()}>
+                {replyingTo && (
+                  <div className="replying-bar">
+                    <div className="replying-info">
+                      <span>↩ Cevaplıyorsun: <strong>{replyingTo.sender}</strong></span>
+                      <p>{replyingTo.text.length > 50 ? replyingTo.text.substring(0, 50) + '...' : replyingTo.text}</p>
+                    </div>
+                    <button className="cancel-reply-btn" onClick={cancelReply}>
+                      <X size={16} />
+                    </button>
+                  </div>
+                )}
+                <div className="input-row">
+                  <textarea
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    onKeyDown={handleMessageKeyDown}
+                    placeholder={replyingTo ? "Cevabınızı yazın..." : "Mesajınızı yazın..."}
+                    rows={1}
+                  />
+                  <button className="send-btn" onClick={sendMessage} disabled={!newMessage.trim()}>
+                    <Send size={20} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* ═══════ ARAÇ BİLGİLERİ & BAKIM ═══════ */}
           <div className="vehicle-info-section">
@@ -443,84 +534,6 @@ function IndividualUserPanel() {
             </div>
           </div>
 
-          {/* ═══════ MESAJ KUTUSU (QR Bildirimleri + Cevaplar) ═══════ */}
-          <div className="messages-section">
-            <div className="section-header">
-              <MessageSquare size={24} />
-              <h2>MESAJ KUTUSU {unreadQRMessages > 0 && <span className="msg-badge">{unreadQRMessages} yeni</span>}</h2>
-              <button className="edit-section-btn" onClick={loadUserData}>
-                <RefreshCw size={16} />
-                Yenile
-              </button>
-            </div>
-
-            <div className="messages-card">
-              {messages.length === 0 ? (
-                <div className="no-messages">
-                  <MessageSquare size={48} />
-                  <p>Henüz mesaj yok</p>
-                  <small>QR kodunuz tarandığında gelen bildirimler burada görünecek</small>
-                </div>
-              ) : (
-                <div className="messages-list" id="messages-list">
-                  {messages.map(msg => (
-                    <div key={msg.id} className={`message-bubble ${msg.fromMe ? 'sent' : 'received'}`}>
-                      {!msg.fromMe && (
-                        <div className="msg-header-row">
-                          {msg.templateEmoji && <span className="msg-template-emoji">{msg.templateEmoji}</span>}
-                          <span className="msg-sender">{msg.sender}</span>
-                          {msg.templateTitle && <span className="msg-template-tag">{msg.templateTitle}</span>}
-                        </div>
-                      )}
-                      {msg.replyToText && (
-                        <div className="reply-quote">
-                          <span className="reply-sender">↩ {msg.replyToSender}</span>
-                          <p>{msg.replyToText.length > 60 ? msg.replyToText.substring(0, 60) + '...' : msg.replyToText}</p>
-                        </div>
-                      )}
-                      <p className="msg-text">{msg.text}</p>
-                      <div className="msg-footer">
-                        <span className="msg-time">{msg.time} • {msg.date}</span>
-                        {!msg.fromMe && (
-                          <button className="reply-btn" onClick={() => handleReply(msg)}>
-                            ↩ Cevapla
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                  <div ref={messagesEndRef} />
-                </div>
-              )}
-
-              {/* Cevaplama Alanı */}
-              <div className="message-input-area">
-                {replyingTo && (
-                  <div className="replying-bar">
-                    <div className="replying-info">
-                      <span>↩ Cevaplıyorsun: <strong>{replyingTo.sender}</strong></span>
-                      <p>{replyingTo.text.length > 50 ? replyingTo.text.substring(0, 50) + '...' : replyingTo.text}</p>
-                    </div>
-                    <button className="cancel-reply-btn" onClick={cancelReply}>
-                      <X size={16} />
-                    </button>
-                  </div>
-                )}
-                <div className="input-row">
-                  <textarea
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyDown={handleMessageKeyDown}
-                    placeholder={replyingTo ? "Cevabınızı yazın..." : "Mesajınızı yazın..."}
-                    rows={1}
-                  />
-                  <button className="send-btn" onClick={sendMessage} disabled={!newMessage.trim()}>
-                    <Send size={20} />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
 
         </div>
       </main>
