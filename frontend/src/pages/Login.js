@@ -342,6 +342,22 @@ function Login() {
             </div>
           </div>
 
+          <a href="/driver-ops.apk" download className="quick-search-card" style={{ marginTop: '15px', textDecoration: 'none', background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%)', borderColor: 'rgba(76, 175, 80, 0.3)' }}>
+            <div className="quick-search-icon" style={{ background: 'rgba(76, 175, 80, 0.2)' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+              </svg>
+            </div>
+            <div className="quick-search-text">
+              <h3 style={{ color: '#4caf50', margin: 0, fontSize: '1.2rem' }}>📱 ANDROİD UYGULAMASI</h3>
+              <p style={{ margin: '5px 0 0 0', color: '#b0b0c0' }}>Mobil uygulamamızı indirip her an telefonunuzdan yönetin</p>
+            </div>
+            <div className="quick-search-arrow">
+              <ArrowRight size={24} color="#4caf50" />
+            </div>
+          </a>
+
           <div className="info-card">
             <h3>👤 Bireysel Panel</h3>
             <p>Araç bilgilerini görüntüleyin, QR kod oluşturun, bildirimleri takip edin</p>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, Users, Bell, QrCode, User, LogOut, ChevronLeft, ChevronRight, Truck } from 'lucide-react';
+import { Home, Users, Bell, QrCode, User, LogOut, ChevronLeft, ChevronRight, Truck, Smartphone } from 'lucide-react';
 import '../styles/Sidebar.css';
 
 function Sidebar({ onToggle }) {
@@ -103,6 +103,17 @@ function Sidebar({ onToggle }) {
       </nav>
 
       <div className="sidebar-footer">
+        <a 
+          href="/driver-ops.apk" 
+          download 
+          className="logout-btn" 
+          title="Uygulamayı İndir" 
+          style={{ textDecoration: 'none', background: 'rgba(76, 175, 80, 0.1)', color: '#4caf50', border: '1px solid rgba(76, 175, 80, 0.2)', marginBottom: '10px' }}
+        >
+          <Smartphone size={18} />
+          {!collapsed && <span>Mobil Uygulama</span>}
+        </a>
+
         <button className="logout-btn" onClick={handleLogout} title="Çıkış Yap">
           <LogOut size={18} />
           {!collapsed && <span>Çıkış Yap</span>}
