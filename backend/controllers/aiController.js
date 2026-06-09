@@ -15,7 +15,7 @@ exports.reviseMessage = async (req, res) => {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
     const prompt = `
 Sen bir otopark ve trafik asistanısın. İnsanlar hatalı park eden, kurallara uymayan araç sahiplerine anonim mesajlar gönderiyorlar. Bazen çok öfkeli, kaba, küfürlü veya tehditkar mesajlar yazabiliyorlar.
