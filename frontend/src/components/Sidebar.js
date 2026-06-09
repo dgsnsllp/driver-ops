@@ -105,7 +105,7 @@ function Sidebar({ onToggle }) {
       <div className="sidebar-footer">
         <a 
           href="/driver-ops.apk" 
-          download 
+          download="driver-ops.apk"
           className="logout-btn" 
           title="Uygulamayı İndir" 
           style={{ textDecoration: 'none', background: 'rgba(76, 175, 80, 0.1)', color: '#4caf50', border: '1px solid rgba(76, 175, 80, 0.2)', marginBottom: '10px' }}

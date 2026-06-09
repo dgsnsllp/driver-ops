@@ -102,6 +102,8 @@ function ReportPage() {
   const [customMessage, setCustomMessage] = useState('');
   const [sent, setSent] = useState(false);
   const [senderName, setSenderName] = useState('');
+  const [isAiChecking, setIsAiChecking] = useState(false);
+  const [aiRevision, setAiRevision] = useState(null);
 
   const handleSelectTemplate = (template) => {
     setSelectedTemplate(template);
@@ -115,7 +117,33 @@ function ReportPage() {
 
   const handleSend = async () => {
     if (!customMessage.trim()) return;
+    
+    setIsAiChecking(true);
+    try {
+      // Önce Yapay Zekaya Gönder
+      const aiResponse = await axios.post('https://driver-ops.onrender.com/api/ai/revise', {
+        message: customMessage
+      });
+      
+      setIsAiChecking(false);
 
+      if (aiResponse.data.isRevised) {
+        // AI mesajı düzelttiyse kullanıcıya sor
+        setAiRevision(aiResponse.data.revised);
+        return; // Direkt gönderme, onayı bekle
+      } else {
+        // Sorun yoksa direkt gönder
+        executeSend(customMessage);
+      }
+    } catch (err) {
+      // AI servisinde hata olursa bekletme, direkt gönder (Failsafe)
+      console.error('AI Check error:', err);
+      setIsAiChecking(false);
+      executeSend(customMessage);
+    }
+  };
+
+  const executeSend = async (finalMessage) => {
     const now = new Date();
     const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
     const dateStr = now.toLocaleDateString('tr-TR');
@@ -124,20 +152,30 @@ function ReportPage() {
     try {
       await axios.post('https://driver-ops.onrender.com/api/vehicles/message', {
         driverId: driverId,
-        text: customMessage,
+        text: finalMessage,
         date: fullDate
       });
       setSent(true);
+      setAiRevision(null);
     } catch (error) {
       console.error('Mesaj gönderilemedi:', error);
       alert('Mesaj gönderilirken bir hata oluştu: ' + (error.response?.data?.error || error.message));
     }
   };
 
+  const approveAiRevision = () => {
+    executeSend(aiRevision);
+  };
+
+  const rejectAiRevision = () => {
+    setAiRevision(null);
+  };
+
   const handleBack = () => {
     setSelectedTemplate(null);
     setCustomMessage('');
     setSent(false);
+    setAiRevision(null);
   };
 
   if (sent) {
@@ -240,13 +278,30 @@ function ReportPage() {
                   />
                 </div>
 
+                {aiRevision && (
+                  <div className="ai-revision-alert">
+                    <div className="ai-revision-header">
+                      <Lightbulb size={20} color="#f59e0b" />
+                      <strong>Sistem Uyarısı</strong>
+                    </div>
+                    <p>Mesajınız topluluk kuralları gereği aşağıdaki şekilde düzenlenmiştir. Bu haliyle göndermeyi onaylıyor musunuz?</p>
+                    <div className="ai-revised-text">
+                      "{aiRevision}"
+                    </div>
+                    <div className="ai-revision-actions">
+                      <button className="ai-btn-reject" onClick={rejectAiRevision}>İptal</button>
+                      <button className="ai-btn-approve" onClick={approveAiRevision}>Onayla ve Gönder</button>
+                    </div>
+                  </div>
+                )}
+
                 <button
                   className="send-report-btn"
                   onClick={handleSend}
-                  disabled={!customMessage.trim()}
+                  disabled={!customMessage.trim() || isAiChecking || aiRevision}
                 >
                   <Send size={20} />
-                  BİLDİRİM GÖNDER
+                  {isAiChecking ? 'Mesaj Kontrol Ediliyor...' : 'BİLDİRİM GÖNDER'}
                 </button>
               </div>
             </div>

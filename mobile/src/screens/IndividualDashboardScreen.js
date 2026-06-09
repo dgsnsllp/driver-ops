@@ -1,7 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl, TouchableOpacity, TextInput, Alert, ActivityIndicator, Image, Platform } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
-import { User, Truck, Bell, MessageSquare, LogOut, Edit3, Save, X, Phone, Mail, MapPin, QrCode, Reply, Camera } from 'lucide-react-native';
+import { User, Truck, Bell, MessageSquare, LogOut, Edit3, Save, X, Phone, Mail, MapPin, QrCode, Reply, Camera, Download } from 'lucide-react-native';
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
 import api from '../api/api';
 
 const IndividualDashboardScreen = ({ navigation }) => {
@@ -30,6 +32,33 @@ const IndividualDashboardScreen = ({ navigation }) => {
   const showAlert = (title, message) => {
     if (Platform.OS === 'web') window.alert(`${title}: ${message}`);
     else Alert.alert(title, message);
+  };
+
+  const downloadQRCode = async () => {
+    if (!driver?._id) return;
+    
+    try {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('İzin Gerekli', 'QR kodunu kaydetmek için galeri erişim iznine ihtiyacımız var.');
+        return;
+      }
+
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=DRIVER-${driver._id}`;
+      const fileUri = FileSystem.documentDirectory + `QR_${driver._id}.png`;
+
+      // İndirme işlemi
+      const { uri } = await FileSystem.downloadAsync(qrUrl, fileUri);
+      
+      // Galeriye kaydet
+      const asset = await MediaLibrary.createAssetAsync(uri);
+      await MediaLibrary.createAlbumAsync('Sürücü Ops', asset, false);
+      
+      Alert.alert('Başarılı', 'QR Kodunuz galeriye kaydedildi! Çıktısını alıp aracınıza yapıştırabilirsiniz.');
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Hata', 'QR kod kaydedilirken bir sorun oluştu.');
+    }
   };
 
   const fetchData = async () => {
@@ -296,6 +325,11 @@ const IndividualDashboardScreen = ({ navigation }) => {
                 style={styles.qrImage} 
               />
               <Text style={styles.qrText}>Bu QR kodu aracınızın camına yerleştirebilirsiniz.</Text>
+              
+              <TouchableOpacity style={styles.downloadBtn} onPress={downloadQRCode}>
+                <Download color="#fff" size={18} style={{ marginRight: 8 }} />
+                <Text style={styles.downloadBtnText}>QR Kodu Galeriye Kaydet</Text>
+              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -430,7 +464,9 @@ const styles = StyleSheet.create({
   emptyText: { color: '#6b7280', fontSize: 13, textAlign: 'center', marginTop: 10 },
   qrContainer: { alignItems: 'center', paddingVertical: 10 },
   qrImage: { width: 200, height: 200, borderRadius: 8, marginBottom: 12 },
-  qrText: { color: '#a0a0b0', fontSize: 12, textAlign: 'center' },
+  qrText: { color: '#a0a0b0', fontSize: 12, textAlign: 'center', marginBottom: 15 },
+  downloadBtn: { flexDirection: 'row', backgroundColor: '#00d4ff', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 8, alignItems: 'center', marginTop: 5 },
+  downloadBtnText: { color: '#0f111a', fontWeight: 'bold', fontSize: 14 },
   msgBubble: { backgroundColor: '#1f2937', padding: 12, borderRadius: 8, marginBottom: 12, borderLeftWidth: 3, borderLeftColor: '#ef4444' },
   msgHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
   msgSender: { color: '#ef4444', fontSize: 12, fontWeight: 'bold' },

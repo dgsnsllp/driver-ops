@@ -421,6 +421,10 @@ app.get('/api/vehicles/search', async (req, res) => {
   }
 });
 
+// AI Message Revision
+const aiController = require('./controllers/aiController');
+app.post('/api/ai/revise', aiController.reviseMessage);
+
 // Vehicles - Send Message
 app.post('/api/vehicles/message', async (req, res) => {
   try {

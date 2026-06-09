@@ -38,6 +38,13 @@
         {
           "cameraPermission": "Araç QR kodunu taramak için kamera izni gerekiyor."
         }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "QR kodunuzu cihaz galerisine kaydetmek için galeri erişim izni gerekiyor.",
+          "savePhotosPermission": "QR kodunuzu galeriye kaydetmek için izin gerekiyor."
+        }
       ]
     ]
   }

@@ -383,6 +383,79 @@
   margin-bottom: 4px;
 }
 
+/* ═══════ AI Revizyon Uyarı Kutusu ═══════ */
+.ai-revision-alert {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 10px;
+  animation: slideUp 0.3s ease;
+}
+
+.ai-revision-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f59e0b;
+  margin-bottom: 8px;
+}
+
+.ai-revision-alert p {
+  color: #d1d5db;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.ai-revised-text {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 12px;
+  border-radius: 8px;
+  color: #fff;
+  font-style: italic;
+  font-size: 14px;
+  margin-bottom: 16px;
+  border-left: 3px solid #f59e0b;
+}
+
+.ai-revision-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.ai-btn-reject {
+  flex: 1;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ai-btn-reject:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.ai-btn-approve {
+  flex: 2;
+  background: #f59e0b;
+  color: #000;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ai-btn-approve:hover {
+  background: #fbbf24;
+  transform: translateY(-2px);
+}
+
 /* Responsive */
 @media (max-width: 480px) {
   .templates-grid {

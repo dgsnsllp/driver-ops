@@ -342,7 +342,7 @@ function Login() {
             </div>
           </div>
 
-          <a href="/driver-ops.apk" download className="quick-search-card" style={{ marginTop: '15px', textDecoration: 'none', background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%)', borderColor: 'rgba(76, 175, 80, 0.3)' }}>
+          <a href="/driver-ops.apk" download="driver-ops.apk" className="quick-search-card" style={{ marginTop: '15px', textDecoration: 'none', background: 'linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%)', borderColor: 'rgba(76, 175, 80, 0.3)' }}>
             <div className="quick-search-icon" style={{ background: 'rgba(76, 175, 80, 0.2)' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
