@@ -243,6 +243,16 @@ app.post('/api/drivers', async (req, res) => {
   }
 });
 
+// Drivers - Update
+app.put('/api/drivers/:id', async (req, res) => {
+  try {
+    const updatedDriver = await Driver.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updatedDriver);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Drivers - Delete
 app.delete('/api/drivers/:id', async (req, res) => {
   try {
@@ -397,17 +407,14 @@ app.get('/api/vehicles/search', async (req, res) => {
     const { plate } = req.query;
     if (!plate) return res.status(400).json({ error: 'Plaka gerekli' });
     
-    // Try exact match or match ignoring spaces
+    // Harfleri/rakamları ayırıp aralarına opsiyonel boşluk (\s*) ekliyoruz
+    // Örn: Kullanıcı "34ABC" yazarsa regex "3\s*4\s*A\s*B\s*C" olur ve veritabanındaki "34 ABC" ile eşleşir
     const cleanPlate = plate.replace(/\s+/g, '');
-    let vehicle = await Vehicle.findOne({ 
-      plate: { $regex: new RegExp(`^${plate}$`, 'i') } 
-    });
+    const regexPattern = cleanPlate.split('').join('\\s*');
     
-    if (!vehicle) {
-      vehicle = await Vehicle.findOne({ 
-        plate: { $regex: new RegExp(`^${cleanPlate}$`, 'i') } 
-      });
-    }
+    const vehicle = await Vehicle.findOne({ 
+      plate: { $regex: new RegExp(`^\\s*${regexPattern}\\s*$`, 'i') } 
+    });
 
     if (!vehicle) {
       return res.status(404).json({ error: 'Bu plakaya ait araç bulunamadı.' });

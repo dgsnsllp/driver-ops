@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { QrCode, Copy, Download, X } from 'lucide-react';
+import { QrCode, Copy, Download } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import '../styles/QRScanner.css';
 
 function QRScanner() {
   const [driverId] = useState('DRV-001');
-  const [qrGenerated, setQrGenerated] = useState(true);
+  const [qrGenerated] = useState(true);
   const [copied, setCopied] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);

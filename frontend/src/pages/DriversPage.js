@@ -41,6 +41,16 @@ function DriversPage() {
     }
   };
 
+  const handleToggleStatus = async (id, currentStatus) => {
+    try {
+      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+      await axios.put(`https://driver-ops.onrender.com/api/drivers/${id}`, { status: newStatus });
+      setDrivers(drivers.map(d => d._id === id ? { ...d, status: newStatus } : d));
+    } catch (error) {
+      console.error('Error updating status:', error);
+    }
+  };
+
   const handleDeleteDriver = (id) => {
     setDriverToDelete(id);
   };
@@ -60,6 +70,31 @@ function DriversPage() {
     return <div className="loading">Yükleniyor...</div>;
   }
 
+  const driversWithVehicle = drivers.filter(d => d.vehicle && d.vehicle !== 'Atanmadı');
+  const driversWithoutVehicle = drivers.filter(d => !d.vehicle || d.vehicle === 'Atanmadı');
+
+  const renderDriverCard = (driver) => (
+    <div key={driver._id} className="driver-card">
+      <div className="driver-card-header">
+        <h3>{driver.name}</h3>
+        <button className="delete-btn" onClick={() => handleDeleteDriver(driver._id)} title="Sil">
+          <Trash2 size={18} />
+        </button>
+      </div>
+      <p>Araç: {driver.vehicle && driver.vehicle !== 'Atanmadı' ? driver.vehicle : <span className="no-vehicle">Atanmadı</span>}</p>
+      <div className="status-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+        <p style={{ marginBottom: 0 }}>Durum: <span className={`status ${driver.status}`}>{driver.status === 'active' ? 'Aktif' : 'Pasif'}</span></p>
+        <button 
+          className="toggle-status-btn"
+          onClick={() => handleToggleStatus(driver._id, driver.status)}
+          style={{ background: 'transparent', border: '1px solid #00d4ff', color: '#00d4ff', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
+        >
+          {driver.status === 'active' ? 'Pasif Yap' : 'Aktif Yap'}
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="dashboard" style={{ marginLeft: sidebarCollapsed ? '72px' : '240px', transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
       <Sidebar onToggle={(collapsed) => setSidebarCollapsed(collapsed)} />
@@ -71,19 +106,29 @@ function DriversPage() {
             <span>Yeni Sürücü Ekle</span>
           </button>
         </div>
-        <div className="drivers-list">
-          {drivers.map((driver) => (
-            <div key={driver._id} className="driver-card">
-              <div className="driver-card-header">
-                <h3>{driver.name}</h3>
-                <button className="delete-btn" onClick={() => handleDeleteDriver(driver._id)} title="Sil">
-                  <Trash2 size={18} />
-                </button>
-              </div>
-              <p>Araç: {driver.vehicle && driver.vehicle !== 'Atanmadı' ? driver.vehicle : <span className="no-vehicle">Atanmadı</span>}</p>
-              <p>Durum: <span className={`status ${driver.status}`}>{driver.status}</span></p>
+        
+        <div className="drivers-layout">
+          <div className="drivers-column active-column">
+            <h2>Araç Tanımlı Sürücüler</h2>
+            <div className="drivers-list">
+              {driversWithVehicle.length > 0 ? (
+                driversWithVehicle.map(renderDriverCard)
+              ) : (
+                <p className="empty-column-text">Araç atanmış sürücü bulunmuyor.</p>
+              )}
             </div>
-          ))}
+          </div>
+          
+          <div className="drivers-column passive-column">
+            <h2>Araç Tanımlanmamış Sürücüler</h2>
+            <div className="drivers-list">
+              {driversWithoutVehicle.length > 0 ? (
+                driversWithoutVehicle.map(renderDriverCard)
+              ) : (
+                <p className="empty-column-text">Tüm sürücülere araç atanmış.</p>
+              )}
+            </div>
+          </div>
         </div>
       </main>
 

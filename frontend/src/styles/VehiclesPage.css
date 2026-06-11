@@ -264,6 +264,11 @@
   box-sizing: border-box;
 }
 
+.form-group select option {
+  background-color: #1a1d2d;
+  color: #fff;
+}
+
 .form-group input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
   opacity: 0.5;

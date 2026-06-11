@@ -23,8 +23,16 @@ const QRScannerScreen = () => {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    // Remove "DRIVER-" prefix if it exists from QR code
-    const driverId = data.startsWith('DRIVER-') ? data.replace('DRIVER-', '') : data;
+    let driverId = data;
+    
+    // Remove "DRIVER-" prefix or extract from web URL
+    if (data.includes('/report/')) {
+      const parts = data.split('/report/');
+      driverId = parts[parts.length - 1];
+    } else if (data.startsWith('DRIVER-')) {
+      driverId = data.replace('DRIVER-', '');
+    }
+    
     navigation.navigate('Report', { targetData: driverId });
     setTimeout(() => setScanned(false), 2000);
   };
